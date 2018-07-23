@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/usr/local/acct/development/projects/Markov Chain/src/main.cpp
+string
+-
+iostream
+-
+iterator
+-
+fstream
+-
+sstream
+-
+map
+-
+
