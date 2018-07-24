@@ -42,6 +42,8 @@ CMAKE_CXX_FLAGS_RELEASE:STRING=-O3 -DNDEBUG
 //Flags used by the CXX compiler during RELWITHDEBINFO builds.
 CMAKE_CXX_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
 
+CMAKE_CXX_STANDARD:STRING=14
+
 //C compiler
 CMAKE_C_COMPILER:FILEPATH=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc
 
@@ -210,7 +212,7 @@ CMAKE_CACHEFILE_DIR:INTERNAL=/usr/local/acct/development/projects/Markov Chain/b
 //Major version of cmake used to create the current loaded cache
 CMAKE_CACHE_MAJOR_VERSION:INTERNAL=3
 //Minor version of cmake used to create the current loaded cache
-CMAKE_CACHE_MINOR_VERSION:INTERNAL=11
+CMAKE_CACHE_MINOR_VERSION:INTERNAL=12
 //Patch version of cmake used to create the current loaded cache
 CMAKE_CACHE_PATCH_VERSION:INTERNAL=0
 //ADVANCED property for variable: CMAKE_COLOR_MAKEFILE
@@ -303,7 +305,7 @@ CMAKE_PLATFORM_INFO_INITIALIZED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_RANLIB
 CMAKE_RANLIB-ADVANCED:INTERNAL=1
 //Path to CMake installation.
-CMAKE_ROOT:INTERNAL=/Applications/CMake.app/Contents/share/cmake-3.11
+CMAKE_ROOT:INTERNAL=/Applications/CMake.app/Contents/share/cmake-3.12
 //ADVANCED property for variable: CMAKE_SHARED_LINKER_FLAGS
 CMAKE_SHARED_LINKER_FLAGS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_SHARED_LINKER_FLAGS_DEBUG
