@@ -5,6 +5,7 @@
 #include <sstream>
 #include <vector>
 #include <map>
+#include <random>
 
 
 static const int ORDER = 2;
@@ -81,17 +82,29 @@ int create_markov_chain (const std::string& corpus, std::map<std::string, std::v
 }
 
 
-int main (int argc, char *argv[]) {
-	std::string corpus;
-	std::map<std::string, std::vector<std::string>> markov_chain;
+int make_paragraph (std::map<std::string, std::vector<std::string>>& markov_chain) {
 	
-	if (read_file (corpus) != 0) {
-		std::cout << "Unable to read corpus!" << std::endl;
-		return 1;	
+	std::map<std::string, std::vector<std::string>>::iterator it;
+	std::vector<std::string> words = {"the", "cat"};
+	
+	for (int i = 0; i < markov_chain.size (); i += 1) {
+		it = markov_chain.find ((words.at (i) + " " + words.at (i + 1)));
+	
+		words.push_back (it->second.at(1));
 	}
 	
-	create_markov_chain (corpus, markov_chain);
+	std::string generated_string = "";
+	for (int i = 0; i < words.size (); i += 1) {
+		generated_string += (words.at (i) + ' ');
+	}
 	
+	std::cout << generated_string << std::endl;
+	
+	return 0;
+}
+
+
+void dump_chain (std::map<std::string, std::vector<std::string>>& markov_chain) {
 	std::cout << "chain length: " << markov_chain.size () << std::endl;
 	
 	for (std::map<std::string, std::vector<std::string>>::iterator iter = markov_chain.begin(); iter != markov_chain.end(); ++iter) {
@@ -105,6 +118,23 @@ int main (int argc, char *argv[]) {
 		
 		std::cout << std::endl;
 	}
+}
+
+
+int main (int argc, char *argv[]) {
+	std::string corpus;
+	std::map<std::string, std::vector<std::string>> markov_chain;
+	
+	if (read_file (corpus) != 0) {
+		std::cout << "Unable to read corpus!" << std::endl;
+		return 1;	
+	}
+	
+	create_markov_chain (corpus, markov_chain);
+	
+	dump_chain (markov_chain);
+	
+	//make_paragraph (markov_chain);
 	
 	return 0;
 }
