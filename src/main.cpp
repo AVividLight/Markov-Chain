@@ -86,11 +86,26 @@ int make_paragraph (std::map<std::string, std::vector<std::string>>& markov_chai
 	
 	std::map<std::string, std::vector<std::string>>::iterator it;
 	std::vector<std::string> words = {"the", "cat"};
+	std::string new_suffex;
 	
-	for (int i = 0; i < markov_chain.size (); i += 1) {
-		it = markov_chain.find ((words.at (i) + " " + words.at (i + 1)));
+	std::random_device m_device;
+	std::minstd_rand m_generator = std::minstd_rand (m_device ());
+	std::uniform_int_distribution<> m_distrobution;
 	
-		words.push_back (it->second.at(1));
+	const int PARAGRAPH_MAX = 3;
+	int paragraph_length = 0;
+	
+	while (paragraph_length < PARAGRAPH_MAX) {
+		it = markov_chain.find (words.at (words.size() - 2) + " " + words.at (words.size() - 1));
+		
+		m_distrobution = std::uniform_int_distribution<> (0, it->second.size() - 1);
+		new_suffex = it->second.at (m_distrobution (m_generator));
+		
+		words.push_back (new_suffex);
+		
+		if (new_suffex.find ('.') != std::string::npos)
+			break;
+		//paragraph_length += 1;
 	}
 	
 	std::string generated_string = "";
@@ -132,9 +147,9 @@ int main (int argc, char *argv[]) {
 	
 	create_markov_chain (corpus, markov_chain);
 	
-	dump_chain (markov_chain);
+	//dump_chain (markov_chain);
 	
-	//make_paragraph (markov_chain);
+	make_paragraph (markov_chain);
 	
 	return 0;
 }
