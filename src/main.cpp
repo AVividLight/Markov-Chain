@@ -19,9 +19,7 @@ int read_file (std::string& corpus) {
 		
 		std::transform(corpus.begin(), corpus.end(), corpus.begin(), ::tolower);
 		
-		for (char& c : corpus)
-		{
-			
+		for (char& c : corpus) {
 			if (c == '\n')
 				c = ' ';
 		}
@@ -83,29 +81,37 @@ int create_markov_chain (const std::string& corpus, std::map<std::string, std::v
 
 
 int make_paragraph (std::map<std::string, std::vector<std::string>>& markov_chain) {
-	
-	std::map<std::string, std::vector<std::string>>::iterator it;
-	std::vector<std::string> words = {"the", "cat"};
-	std::string new_suffex;
-	
 	std::random_device m_device;
 	std::minstd_rand m_generator = std::minstd_rand (m_device ());
 	std::uniform_int_distribution<> m_distrobution;
 	
-	const int PARAGRAPH_MAX = 3;
+	std::map<std::string, std::vector<std::string>>::iterator it = markov_chain.begin ();
+	m_distrobution = std::uniform_int_distribution<> (0, markov_chain.size () - 1);
+	std::advance (it, m_distrobution (m_generator));
+	
+	std::vector<std::string> words = {it->first, it->second.at(0)};
+	std::string new_suffex;
+	
+	const int PARAGRAPH_MAX = 10;
 	int paragraph_length = 0;
 	
 	while (paragraph_length < PARAGRAPH_MAX) {
 		it = markov_chain.find (words.at (words.size() - 2) + " " + words.at (words.size() - 1));
 		
-		m_distrobution = std::uniform_int_distribution<> (0, it->second.size() - 1);
+		/*if (it == markov_chain.end ()) {
+			std::cout << "iterator at end" << std::endl;
+			std::cout << it << " == " << markov_chain.end () << std::endl;
+			break;
+		}*/
+		
+		m_distrobution = std::uniform_int_distribution<> (0, it->second.size());
 		new_suffex = it->second.at (m_distrobution (m_generator));
 		
 		words.push_back (new_suffex);
 		
-		if (new_suffex.find ('.') != std::string::npos)
-			break;
-		//paragraph_length += 1;
+		//if (new_suffex.find ('.') != std::string::npos)
+			//break;
+		paragraph_length += 1;
 	}
 	
 	std::string generated_string = "";
