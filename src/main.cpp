@@ -89,11 +89,13 @@ int make_paragraph (std::map<std::string, std::vector<std::string>>& markov_chai
 	m_distrobution = std::uniform_int_distribution<> (0, markov_chain.size () - 1);
 	std::advance (it, m_distrobution (m_generator));
 	
-	std::vector<std::string> words = {it->first, it->second.at(0)};
+	std::vector<std::string> words = {it->first, it->second.front ()};
 	std::string new_suffex;
 	
 	const int PARAGRAPH_MAX = 10;
 	int paragraph_length = 0;
+	
+	int max = 0;
 	
 	while (paragraph_length < PARAGRAPH_MAX) {
 		it = markov_chain.find (words.at (words.size() - 2) + " " + words.at (words.size() - 1));
@@ -104,10 +106,24 @@ int make_paragraph (std::map<std::string, std::vector<std::string>>& markov_chai
 			break;
 		}*/
 		
-		m_distrobution = std::uniform_int_distribution<> (0, it->second.size());
-		new_suffex = it->second.at (m_distrobution (m_generator));
+		// *** TODO: fix returning crazy number
+		m_distrobution = std::uniform_int_distribution<> (0, it->second.size() - 1);
+		max = m_distrobution (m_generator);
+		std::cout << "rand: " << max << std::endl;
 		
-		words.push_back (new_suffex);
+		if (it->second.size () > 0) {
+			m_distrobution = std::uniform_int_distribution<> (0, it->second.size() - 1);
+			max = m_distrobution (m_generator);
+		} else {
+			max = 0;
+		}
+		
+		std::cout << "max: " << max << std::endl;
+		
+		//new_suffex = it->second.at (m_distrobution (m_generator));
+		new_suffex = it->second.at (max);
+		
+		//words.push_back (new_suffex);
 		
 		//if (new_suffex.find ('.') != std::string::npos)
 			//break;
