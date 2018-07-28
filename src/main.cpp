@@ -6,9 +6,20 @@
 #include <vector>
 #include <map>
 #include <random>
+#include <algorithm>
 
 
 static const int ORDER = 2;
+
+
+class Markov_Prefix {
+	std::string first_word;
+	std::string second_word;
+	
+	std::string concat () {
+		return first_word + " " + second_word;
+	}
+} prefix;
 
 
 int read_file (std::string& corpus) {
@@ -40,18 +51,19 @@ int read_file (std::string& corpus) {
 }
 
 
-int evaluate_string (const std::vector<std::string>& words, std::map<std::string, std::vector<std::string>>& markov_chain) {
-	for (int i = 0; i < words.size (); i += 1) {
+int evaluate_string (const std::vector<std::string>& all_words, std::map<std::string, std::vector<std::string>>& markov_chain) {
+	for (int i = 0; i < all_words.size (); i += 1) {
 		if (i > 1) {
-			std::string prefex = words.at(i - 2) + ' ' + words.at(i - 1);
+			std::string prefex = all_words[i - 2] + ' ' + all_words[i - 1];
 			
 			std::map<std::string, std::vector<std::string>>::iterator lookup = markov_chain.find (prefex);
 			if (lookup != markov_chain.end ()) {
-				lookup->second.push_back (words.at (i));
+				//TODO: Check to see if suffex already exists and ignore if true
+				lookup->second.emplace_back (all_words[i]);
 				
 				//std::cout << "adding `" << words.at (i) << "` to `" << lookup->first << "`" << std::endl;
 			} else {
-				std::vector<std::string> suffex (1, words.at (i));
+				std::vector<std::string> suffex (1, all_words[i]);
 				markov_chain.emplace (prefex, suffex);
 				
 				//std::cout << "creating `" << prefex << " : " << suffex.at(0) << "`" << std::endl;
@@ -64,17 +76,17 @@ int evaluate_string (const std::vector<std::string>& words, std::map<std::string
 
 
 int create_markov_chain (const std::string& corpus, std::map<std::string, std::vector<std::string>>& markov_chain) {
-	std::vector<std::string> words;
+	std::vector<std::string> all_words;
 	std::stringstream string_stream (corpus);
 	std::string substring;
 	
 	while (std::getline (string_stream, substring, ' ')) {
 		if (substring.empty () == false) {
-			words.push_back (substring);
+			all_words.emplace_back (substring);
 		}
 	}
 	
-	evaluate_string (words, markov_chain);
+	evaluate_string (all_words, markov_chain);
 	
 	return 0;
 }
@@ -83,59 +95,62 @@ int create_markov_chain (const std::string& corpus, std::map<std::string, std::v
 int make_paragraph (std::map<std::string, std::vector<std::string>>& markov_chain) {
 	std::random_device m_device;
 	std::minstd_rand m_generator = std::minstd_rand (m_device ());
-	std::uniform_int_distribution<> m_distrobution;
+	std::uniform_int_distribution<> m_distrobution = std::uniform_int_distribution<> (0, markov_chain.size () - 1);
 	
 	std::map<std::string, std::vector<std::string>>::iterator it = markov_chain.begin ();
-	m_distrobution = std::uniform_int_distribution<> (0, markov_chain.size () - 1);
 	std::advance (it, m_distrobution (m_generator));
 	
-	std::vector<std::string> words = {it->first, it->second.front ()};
-	std::string new_suffex;
 	
-	const int PARAGRAPH_MAX = 10;
+	std::stringstream ss(it->first);
+	std::string item;
+	std::vector<std::string> tokens;
+	while (getline(ss, item, ' ')) {
+		tokens.push_back(item);
+	}
+	
+	
+	std::vector<std::string> generated_string; //{it->first};//, it->second[0]}; // *** TODO: RANDOMIZE
+	generated_string.emplace_back (tokens[0]);
+	generated_string.emplace_back (tokens[1]);
+	
+	//std::cout << "generated string: " << generated_string << std::endl; //it->first << std::endl;
+	
+	const int PARAGRAPH_MAX = 20;
 	int paragraph_length = 0;
 	
 	int max = 0;
 	
 	while (paragraph_length < PARAGRAPH_MAX) {
-		it = markov_chain.find (words.at (words.size() - 2) + " " + words.at (words.size() - 1));
-		
 		/*if (it == markov_chain.end ()) {
-			std::cout << "iterator at end" << std::endl;
-			std::cout << it << " == " << markov_chain.end () << std::endl;
-			break;
+			std::cout << "iterator at end" << std::endl; // *** TODO: Random until not end.
+			//break;
 		}*/
 		
-		// *** TODO: fix returning crazy number
-		m_distrobution = std::uniform_int_distribution<> (0, it->second.size() - 1);
-		max = m_distrobution (m_generator);
-		std::cout << "rand: " << max << std::endl;
+		std::string debug_string = (generated_string[generated_string.size() - 2] + " " + generated_string[generated_string.size() - 1]);
 		
-		if (it->second.size () > 0) {
-			m_distrobution = std::uniform_int_distribution<> (0, it->second.size() - 1);
+		it = markov_chain.find (debug_string);
+		if (it == markov_chain.end ()) {
+			std::cout << "unable to find '" << debug_string << "'" << std::endl << std::endl;
+			break;
+		}
+		
+		if (max > 0) {
+			m_distrobution = std::uniform_int_distribution<> (0, it->second.size ());
 			max = m_distrobution (m_generator);
 		} else {
 			max = 0;
 		}
-		
-		std::cout << "max: " << max << std::endl;
-		
-		//new_suffex = it->second.at (m_distrobution (m_generator));
-		new_suffex = it->second.at (max);
-		
-		//words.push_back (new_suffex);
-		
-		//if (new_suffex.find ('.') != std::string::npos)
-			//break;
+		generated_string.emplace_back (it->second[max]);
+
 		paragraph_length += 1;
 	}
 	
-	std::string generated_string = "";
-	for (int i = 0; i < words.size (); i += 1) {
-		generated_string += (words.at (i) + ' ');
+	std::string concatenated_string = "";
+	for (int i = 0; i < generated_string.size (); i += 1) {
+		concatenated_string += (generated_string[i] + ' ');
 	}
 	
-	std::cout << generated_string << std::endl;
+	std::cout << "<*> " << concatenated_string << "<*>" << std::endl;
 	
 	return 0;
 }
@@ -150,7 +165,7 @@ void dump_chain (std::map<std::string, std::vector<std::string>>& markov_chain) 
 		for (int i = 0; i < iter->second.size (); i += 1)
 		{
 			
-			std::cout << "[" << iter->second.at (i) << "]";
+			std::cout << "[" << iter->second[i] << "]";
 		}
 		
 		std::cout << std::endl;
@@ -161,6 +176,7 @@ void dump_chain (std::map<std::string, std::vector<std::string>>& markov_chain) 
 int main (int argc, char *argv[]) {
 	std::string corpus;
 	std::map<std::string, std::vector<std::string>> markov_chain;
+	std::map<Markov_Prefix, std::vector<std::string>> test;
 	
 	if (read_file (corpus) != 0) {
 		std::cout << "Unable to read corpus!" << std::endl;
