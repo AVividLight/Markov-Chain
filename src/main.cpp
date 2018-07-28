@@ -101,31 +101,21 @@ int make_paragraph (std::map<std::string, std::vector<std::string>>& markov_chai
 	std::advance (it, m_distrobution (m_generator));
 	
 	
+	std::vector<std::string> generated_string;
+	
 	std::stringstream ss(it->first);
 	std::string item;
-	std::vector<std::string> tokens;
 	while (getline(ss, item, ' ')) {
-		tokens.push_back(item);
+		generated_string.emplace_back(item);
 	}
+
 	
-	
-	std::vector<std::string> generated_string; //{it->first};//, it->second[0]}; // *** TODO: RANDOMIZE
-	generated_string.emplace_back (tokens[0]);
-	generated_string.emplace_back (tokens[1]);
-	
-	//std::cout << "generated string: " << generated_string << std::endl; //it->first << std::endl;
-	
-	const int PARAGRAPH_MAX = 20;
+	const int PARAGRAPH_MAX = 100;
 	int paragraph_length = 0;
 	
 	int max = 0;
 	
 	while (paragraph_length < PARAGRAPH_MAX) {
-		/*if (it == markov_chain.end ()) {
-			std::cout << "iterator at end" << std::endl; // *** TODO: Random until not end.
-			//break;
-		}*/
-		
 		std::string debug_string = (generated_string[generated_string.size() - 2] + " " + generated_string[generated_string.size() - 1]);
 		
 		it = markov_chain.find (debug_string);
@@ -134,8 +124,10 @@ int make_paragraph (std::map<std::string, std::vector<std::string>>& markov_chai
 			break;
 		}
 		
-		if (max > 0) {
-			m_distrobution = std::uniform_int_distribution<> (0, it->second.size ());
+		max = it->second.size ();
+		
+		if (max != 0) {
+			m_distrobution = std::uniform_int_distribution<> (0, max);
 			max = m_distrobution (m_generator);
 		} else {
 			max = 0;
