@@ -1,0 +1,38 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/Markov_Chain/io.hpp
+fstream
+-
+string
+-
+
+../include/Markov_Chain/markov_chain.hpp
+io.hpp
+../include/Markov_Chain/io.hpp
+map
+-
+vector
+-
+string
+-
+iostream
+-
+
+/usr/local/acct/development/projects/Markov Chain/new/src/io.cpp
+io.hpp
+/usr/local/acct/development/projects/Markov Chain/new/src/io.hpp
+
+/usr/local/acct/development/projects/Markov Chain/new/src/main.cpp
+markov_chain.hpp
+/usr/local/acct/development/projects/Markov Chain/new/src/markov_chain.hpp
+
+/usr/local/acct/development/projects/Markov Chain/new/src/markov_chain.cpp
+markov_chain.hpp
+/usr/local/acct/development/projects/Markov Chain/new/src/markov_chain.hpp
+

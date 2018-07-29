@@ -5,5 +5,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${Markov_Chain_SOURCE_DIR}/cmake")
 set(BIN_DIR ${Markov_Chain_SOURCE_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-include_directories(include)
-add_executable(Markov_Chain src/main.cpp)
+include_directories(include/Markov_Chain)
+add_executable(Markov_Chain src/main.cpp src/io.cpp src/markov_chain.cpp)
+
+install (TARGETS Markov_Chain RUNTIME DESTINATION ${BIN_DIR})
