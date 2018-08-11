@@ -21,12 +21,14 @@ vector
 -
 string
 -
+sstream
+-
 iostream
 -
-
-/usr/local/acct/development/projects/Markov Chain/new/src/io.cpp
-io.hpp
-/usr/local/acct/development/projects/Markov Chain/new/src/io.hpp
+random
+-
+iostream
+-
 
 /usr/local/acct/development/projects/Markov Chain/new/src/main.cpp
 markov_chain.hpp
