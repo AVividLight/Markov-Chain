@@ -15,6 +15,9 @@
 //DELETE ME **************************************************************************************************************************************************************************
 
 
+const static int ORDER = 2;
+
+
 class Word {
 public:
 	
@@ -56,6 +59,31 @@ public:
 	Prefex (std::vector<Word> c_words) {
 		words = c_words;
 	}
+	
+	std::string AsString () const {
+		std::string str;
+		for (int i = 0; i < ORDER; i += 1) {
+			str.append (words.at (i).AsString ());
+			str.append (" ");
+		}
+		str.pop_back ();
+		
+		return str;
+	}
+	
+	bool operator == (const Prefex other) const {
+		return /*AsString () == other.AsString ();*/ (AsString ().compare (other.AsString ()) == 0) ? true : false;
+	}
+	
+	bool operator < (const Prefex other) const {
+		
+		if (AsString ().compare (other.AsString ()) == 0) {
+			return true;
+		} else {
+			
+			return AsString () < other.AsString ();
+		}
+	}
 private:
 };
 
@@ -63,6 +91,10 @@ private:
 class Suffex {
 public:
 	std::vector<Word> words;
+	
+	Suffex (std::vector<Word> c_words) {
+		words = c_words;
+	}
 private:
 };
 
@@ -72,8 +104,6 @@ public:
 	int Start ();
 
 private:
-	const int ORDER = 2;
-	
 	std::map<Prefex, Suffex> markov_map;
 	
 	int BuildMap (std::string &corpus);
@@ -84,6 +114,7 @@ private:
 	bool CharIsPunctuation (const char &c);
 	bool CharIsQuotation (const char &c);
 	int LinkWords (const std::vector<Word> &all_words);
+	void DebugLoop (const std::vector<Word> &new_prefex);
 	
 	void Lowercase (std::string &str) {
 		std::transform (str.begin (), str.end (), str.begin (), ::tolower);

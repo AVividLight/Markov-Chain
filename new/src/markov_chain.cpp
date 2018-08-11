@@ -115,18 +115,34 @@ bool MarkovChain::CharIsQuotation (const char &c) {
 
 
 int MarkovChain::LinkWords (const std::vector<Word> &all_words) {
+	std::map <Prefex, Suffex>::iterator map_iterator;
 	int total_words = all_words.size ();
-	std::pair<std::map<Word,std::vector<Word>>::iterator, bool> iterator_return;
-	
 	if (total_words > ORDER) {
 		int index = ORDER;
 		while (index <= total_words) {
-			std::vector<Word> prefex_words;
+			std::vector<Word> new_prefex;
 			for (int i = ORDER; i > 0; i -= 1) {
-				prefex_words.push_back (all_words.at (index - i));
-				//std::cout << '[' << i << "] " << all_words.at (index - i).AsString () << std::endl;
+				new_prefex.push_back (all_words.at (index - i));
 			}
-			//std::cout << std::endl;
+			
+			//DebugLoop (new_prefex);
+			
+			Prefex prefex (new_prefex);
+			map_iterator = markov_map.find (prefex);
+			
+			if (map_iterator != markov_map.end()) {
+				std::cout << "* Key already exists: " << prefex.AsString () << std::endl;
+			} else {
+				std::cout << "* Key does not exist: " << prefex.AsString () << std::endl;
+			}
+			
+			/*std::vector<Word> new_suffex;
+			new_suffex.push_back (all_words.at (index - 1));
+			Suffex suffex (new_suffex);
+			
+			iterator_return = markov_map.insert (std::pair<Prefex, Suffex> (prefex, suffex));
+			
+			std::cout << "iterator_return: " << iterator_return.second << std::endl;*/
 			
 			index += 1;
 		}
@@ -135,4 +151,12 @@ int MarkovChain::LinkWords (const std::vector<Word> &all_words) {
 	}
 	
 	return 0;
+}
+
+
+void MarkovChain::DebugLoop (const std::vector<Word> &new_prefex) {
+	for (int i = 0; i < ORDER; i += 1) {
+		std::cout << new_prefex.at (i).AsString () + ' ';
+	}
+	std::cout << std::endl;
 }
