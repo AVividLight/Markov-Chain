@@ -22,6 +22,11 @@ int MarkovChain::BuildMap (std::string &corpus) {
 	RemoveNewLines (corpus);
 	std::vector<Word> all_words = SplitStringIntoWords (corpus);
 	
+	if (LinkWords (all_words) != 0) {
+		std::cout << "ORDER larger than corpus!" << std::endl;
+		return 1;
+	}
+	
 	return 0;
 }
 
@@ -106,4 +111,28 @@ bool MarkovChain::CharIsQuotation (const char &c) {
 		default:
 		return false;
 	}
+}
+
+
+int MarkovChain::LinkWords (const std::vector<Word> &all_words) {
+	int total_words = all_words.size ();
+	std::pair<std::map<Word,std::vector<Word>>::iterator, bool> iterator_return;
+	
+	if (total_words > ORDER) {
+		int index = ORDER;
+		while (index <= total_words) {
+			std::vector<Word> prefex_words;
+			for (int i = ORDER; i > 0; i -= 1) {
+				prefex_words.push_back (all_words.at (index - i));
+				//std::cout << '[' << i << "] " << all_words.at (index - i).AsString () << std::endl;
+			}
+			//std::cout << std::endl;
+			
+			index += 1;
+		}
+	} else {
+		return 1;
+	}
+	
+	return 0;
 }

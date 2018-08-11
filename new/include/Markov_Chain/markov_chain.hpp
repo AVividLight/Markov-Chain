@@ -12,6 +12,7 @@
 
 //DELETE ME **************************************************************************************************************************************************************************
 #include <iostream>
+//DELETE ME **************************************************************************************************************************************************************************
 
 
 class Word {
@@ -28,11 +29,11 @@ public:
 		quotation_location = l;
 	}
 	
-	bool EndOfSentence () { return natural_punctuation; }
-	bool QuoteStart () { return (quotation_location == 0) ? true : false; }
-	bool QuoteEnd () { return (quotation_location == (text_value.length () - 1)) ? true : false; }
+	bool EndOfSentence () const { return natural_punctuation; }
+	bool QuoteStart () const { return (quotation_location == 0) ? true : false; }
+	bool QuoteEnd () const { return (quotation_location == (text_value.length () - 1)) ? true : false; }
 	
-	std::string AsString () { return text_value; }
+	std::string AsString () const { return text_value; }
 	
 private:
 	std::string text_value;
@@ -48,12 +49,32 @@ private:
 };
 
 
+class Prefex {
+public:
+	std::vector<Word> words;
+	
+	Prefex (std::vector<Word> c_words) {
+		words = c_words;
+	}
+private:
+};
+
+
+class Suffex {
+public:
+	std::vector<Word> words;
+private:
+};
+
+
 class MarkovChain {
 public:
 	int Start ();
 
 private:
-	std::map<Word, std::vector<Word>> markov_map;
+	const int ORDER = 2;
+	
+	std::map<Prefex, Suffex> markov_map;
 	
 	int BuildMap (std::string &corpus);
 	void RemoveNewLines (std::string &corpus);
@@ -62,10 +83,11 @@ private:
 	void AnalyzeWord (Word &word);
 	bool CharIsPunctuation (const char &c);
 	bool CharIsQuotation (const char &c);
+	int LinkWords (const std::vector<Word> &all_words);
 	
-	/*void Lowercase (std::string &str) {
+	void Lowercase (std::string &str) {
 		std::transform (str.begin (), str.end (), str.begin (), ::tolower);
-	}*/
+	}
 	
 	std::random_device rand_device;
 	std::minstd_rand rand_generator = std::minstd_rand (rand_device ());
