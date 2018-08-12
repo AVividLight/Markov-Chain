@@ -2,7 +2,7 @@
 
 
 int MarkovChain::Start () {
-	IO_Manager io;
+	InputOutput io;
 	std::string corpus;
 	
 	if (io.LoadFile (corpus) != 0) {
@@ -14,6 +14,9 @@ int MarkovChain::Start () {
 		return 1;
 	}
 	
+	TextCreator text_creator;
+	std::cout << "*Generated Text*" << std::endl << std::endl << text_creator.BuildSentence () << std::endl;
+	
 	return 0;
 }
 
@@ -23,7 +26,7 @@ int MarkovChain::BuildMap (std::string &corpus) {
 	std::vector<Word> all_words = SplitStringIntoWords (corpus);
 	
 	if (LinkWords (all_words) != 0) {
-		std::cout << "ORDER larger than corpus!" << std::endl;
+		std::cout << "[MarkovChain::BuildMap] ORDER larger than corpus!" << std::endl;
 		return 1;
 	}
 	
@@ -129,19 +132,13 @@ int MarkovChain::LinkWords (const std::vector<Word> &all_words) {
 			new_suffex.words.push_back (all_words.at (index));
 		
 			std::pair<Prefex, Suffex> ngram (new_prefex, new_suffex);
-			///*PRINT THIS NGRAM*/std::cout << '[' << ngram.first.AsString () << " : " << ngram.second.AsString () << ']' << std::endl;
 			
-			std::pair<std::map<Prefex, Suffex>::iterator, bool> insert_return;
-			insert_return = markov_map.insert (ngram);
+			const std::pair<std::map<Prefex, Suffex>::iterator, bool> insert_return = markov_map.insert (ngram);
 			if (insert_return.second == false) {
 				insert_return.first->second.words.push_back (all_words.at (index));
 				//std::cout << "Element already exists, now: [" << insert_return.first->first.AsString () << " : " << insert_return.first->second.AsString () << ']' << std::endl;
-			}/* else {
-				//std::cout << "Adding new element: [" << insert_return.first->first.AsString () << " : " << insert_return.first->second.AsString () << ']' << std::endl;
-			}*/
-			
-			///*PRINT MODIFIED NGRAM*/std::cout << '[' << insert_return.first->first.AsString () << " : " << insert_return.first->second.AsString () << ']' << std::endl;
-
+			}// else {std::cout << "Adding new element: [" << insert_return.first->first.AsString () << " : " << insert_return.first->second.AsString () << ']' << std::endl;}
+				
 			index += 1;
 		}
 	} else {

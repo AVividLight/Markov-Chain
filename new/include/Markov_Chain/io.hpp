@@ -6,7 +6,7 @@
 
 
 
-class IO_Manager {
+class InputOutput {
 public:
 	int LoadFile (std::string &corpus);
 

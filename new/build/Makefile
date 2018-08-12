@@ -250,6 +250,33 @@ src/markov_chain.cpp.s:
 	$(MAKE) -f CMakeFiles/Markov_Chain.dir/build.make CMakeFiles/Markov_Chain.dir/src/markov_chain.cpp.s
 .PHONY : src/markov_chain.cpp.s
 
+src/text_creator.o: src/text_creator.cpp.o
+
+.PHONY : src/text_creator.o
+
+# target to build an object file
+src/text_creator.cpp.o:
+	$(MAKE) -f CMakeFiles/Markov_Chain.dir/build.make CMakeFiles/Markov_Chain.dir/src/text_creator.cpp.o
+.PHONY : src/text_creator.cpp.o
+
+src/text_creator.i: src/text_creator.cpp.i
+
+.PHONY : src/text_creator.i
+
+# target to preprocess a source file
+src/text_creator.cpp.i:
+	$(MAKE) -f CMakeFiles/Markov_Chain.dir/build.make CMakeFiles/Markov_Chain.dir/src/text_creator.cpp.i
+.PHONY : src/text_creator.cpp.i
+
+src/text_creator.s: src/text_creator.cpp.s
+
+.PHONY : src/text_creator.s
+
+# target to generate assembly for a file
+src/text_creator.cpp.s:
+	$(MAKE) -f CMakeFiles/Markov_Chain.dir/build.make CMakeFiles/Markov_Chain.dir/src/text_creator.cpp.s
+.PHONY : src/text_creator.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -272,6 +299,9 @@ help:
 	@echo "... src/markov_chain.o"
 	@echo "... src/markov_chain.i"
 	@echo "... src/markov_chain.s"
+	@echo "... src/text_creator.o"
+	@echo "... src/text_creator.i"
+	@echo "... src/text_creator.s"
 .PHONY : help
 
 

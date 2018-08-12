@@ -1,7 +1,7 @@
 #include "io.hpp"
 
 
-int IO_Manager::LoadFile (std::string &corpus) {
+int InputOutput::LoadFile (std::string &corpus) {
 	std::ifstream source_file ("/usr/local/acct/development/projects/Markov Chain/new/resources/corpus.txt");
 	
 	if (source_file.good () != true) {

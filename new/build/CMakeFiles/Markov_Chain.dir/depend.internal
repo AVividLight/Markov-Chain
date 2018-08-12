@@ -7,8 +7,13 @@ CMakeFiles/Markov_Chain.dir/src/io.cpp.o
 CMakeFiles/Markov_Chain.dir/src/main.cpp.o
  ../include/Markov_Chain/io.hpp
  ../include/Markov_Chain/markov_chain.hpp
+ ../include/Markov_Chain/text_creator.hpp
  /usr/local/acct/development/projects/Markov Chain/new/src/main.cpp
 CMakeFiles/Markov_Chain.dir/src/markov_chain.cpp.o
  ../include/Markov_Chain/io.hpp
  ../include/Markov_Chain/markov_chain.hpp
+ ../include/Markov_Chain/text_creator.hpp
  /usr/local/acct/development/projects/Markov Chain/new/src/markov_chain.cpp
+CMakeFiles/Markov_Chain.dir/src/text_creator.cpp.o
+ ../include/Markov_Chain/text_creator.hpp
+ /usr/local/acct/development/projects/Markov Chain/new/src/text_creator.cpp
