@@ -4,6 +4,8 @@
 std::string TextCreator::BuildSentence () {
 	Sentence sentence;
 	
+	const int this_sentence_length = RandomInt (WORDS_PER_SENTENCE_LOWEND, WORDS_PER_SENTENCE_HIGHEND);
+	
 	return sentence.AsString ();
 }
 
@@ -14,6 +16,15 @@ std::string TextCreator::BuildParagraph () {
 	BuildSentence ();
 	
 	return paragraph.AsString ();
+}
+
+
+std::string TextCreator::BuildChapter () {
+	Chapter chapter;
+	
+	BuildParagraph ();
+	
+	return chapter.AsString ();
 }
 
 

@@ -8,6 +8,20 @@
 
 const static int ORDER = 2;
 
+//* https://strainindex.wordpress.com/2008/07/28/the-average-sentence-length/
+const static int WORDS_PER_SENTENCE_LOWEND = 2;
+const static int WORDS_PER_SENTENCE_HIGHEND = 17;
+
+const static int SENTENCES_PER_PARAGRAPH_LOWEND = 1;
+const static int SENTENCES_PER_PARAGRAPH_HIGHEND = 9;
+
+const static int PARAGRAPHS_PER_CHAPTER_LOWEND = 3;
+const static int PARAGRAPHS_PER_CHAPTER_HIGHEND = 12;
+
+const static int CHAPTERS_PER_BOOK_LOWEND = 1;
+const static int CHAPTERS_PER_BOOK_HIGHEND = 18;
+
+
 
 class Word {
 public:
@@ -137,7 +151,7 @@ private:
 };
 
 
-class Book {
+class Chapter {
 public:
 	
 	std::string AsString () const {
@@ -155,10 +169,29 @@ private:
 };
 
 
+class Book {
+public:
+	
+	std::string AsString () const {
+		std::string str;
+		for (int i = 0; i < chapters.size (); i += 1) {
+			str.append (chapters.at (i).AsString ());
+			str.append ("\n\n***\n");
+		}
+		str.pop_back ();
+		
+		return str;
+	}
+private:
+	std::vector<Chapter> chapters;
+};
+
+
 class TextCreator {
 public:
 	std::string BuildSentence ();
 	std::string BuildParagraph ();
+	std::string BuildChapter ();
 	std::string BuildBook ();
 	
 

@@ -36,7 +36,15 @@ vector
 random
 -
 
+/usr/local/acct/development/projects/Markov Chain/new/src/main.cpp
+markov_chain.hpp
+/usr/local/acct/development/projects/Markov Chain/new/src/markov_chain.hpp
+
 /usr/local/acct/development/projects/Markov Chain/new/src/markov_chain.cpp
 markov_chain.hpp
 /usr/local/acct/development/projects/Markov Chain/new/src/markov_chain.hpp
+
+/usr/local/acct/development/projects/Markov Chain/new/src/text_creator.cpp
+text_creator.hpp
+/usr/local/acct/development/projects/Markov Chain/new/src/text_creator.hpp
 
