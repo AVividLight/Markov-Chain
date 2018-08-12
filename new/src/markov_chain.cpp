@@ -119,31 +119,29 @@ int MarkovChain::LinkWords (const std::vector<Word> &all_words) {
 	int total_words = all_words.size ();
 	if (total_words > ORDER) {
 		int index = ORDER;
-		while (index <= total_words) {
-			std::vector<Word> new_prefex;
+		while (index < total_words) {
+			Prefex new_prefex;
 			for (int i = ORDER; i > 0; i -= 1) {
-				new_prefex.push_back (all_words.at (index - i));
+				new_prefex.words.push_back (all_words.at (index - i));
 			}
-			//DebugLoop (new_prefex);
 			
-			Prefex prefex (new_prefex);
-			
-			std::vector<Word> new_suffex;
-			new_suffex.push_back (all_words.at (index - 1));
-			Suffex suffex (new_suffex);
+			Suffex new_suffex;
+			new_suffex.words.push_back (all_words.at (index));
+		
+			std::pair<Prefex, Suffex> ngram (new_prefex, new_suffex);
+			///*PRINT THIS NGRAM*/std::cout << '[' << ngram.first.AsString () << " : " << ngram.second.AsString () << ']' << std::endl;
 			
 			std::pair<std::map<Prefex, Suffex>::iterator, bool> insert_return;
-			insert_return = markov_map.insert (std::pair<Prefex, Suffex> (prefex, suffex));
+			insert_return = markov_map.insert (ngram);
 			if (insert_return.second == false) {
-				std::cout << "Element already exists!" << std::endl;
-			} else {
-				std::cout << "Adding new element" << std::endl;
-			}
+				insert_return.first->second.words.push_back (all_words.at (index));
+				//std::cout << "Element already exists, now: [" << insert_return.first->first.AsString () << " : " << insert_return.first->second.AsString () << ']' << std::endl;
+			}/* else {
+				//std::cout << "Adding new element: [" << insert_return.first->first.AsString () << " : " << insert_return.first->second.AsString () << ']' << std::endl;
+			}*/
 			
-			/*iterator_return = markov_map.insert (std::pair<Prefex, Suffex> (prefex, suffex));
-			
-			std::cout << "iterator_return: " << iterator_return.second << std::endl;*/
-			
+			///*PRINT MODIFIED NGRAM*/std::cout << '[' << insert_return.first->first.AsString () << " : " << insert_return.first->second.AsString () << ']' << std::endl;
+
 			index += 1;
 		}
 	} else {
@@ -151,12 +149,4 @@ int MarkovChain::LinkWords (const std::vector<Word> &all_words) {
 	}
 	
 	return 0;
-}
-
-
-void MarkovChain::DebugLoop (const std::vector<Word> &new_prefex) {
-	for (int i = 0; i < ORDER; i += 1) {
-		std::cout << new_prefex.at (i).AsString () + ' ';
-	}
-	std::cout << std::endl;
 }

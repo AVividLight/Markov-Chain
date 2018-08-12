@@ -56,6 +56,8 @@ class Prefex {
 public:
 	std::vector<Word> words;
 	
+	Prefex () {}
+	
 	Prefex (std::vector<Word> c_words) {
 		words = c_words;
 	}
@@ -78,8 +80,21 @@ class Suffex {
 public:
 	std::vector<Word> words;
 	
+	Suffex () {}
+	
 	Suffex (std::vector<Word> c_words) {
 		words = c_words;
+	}
+	
+	std::string AsString () const {
+		std::string str;
+		for (int i = 0; i < words.size (); i += 1) {
+			str.append (words.at (i).AsString ());
+			str.append (", ");
+		}
+		str.erase (str.size () - 2);
+		
+		return str;
 	}
 private:
 };
@@ -109,7 +124,6 @@ private:
 	bool CharIsPunctuation (const char &c);
 	bool CharIsQuotation (const char &c);
 	int LinkWords (const std::vector<Word> &all_words);
-	void DebugLoop (const std::vector<Word> &new_prefex);
 	
 	void Lowercase (std::string &str) {
 		std::transform (str.begin (), str.end (), str.begin (), ::tolower);
