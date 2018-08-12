@@ -124,23 +124,23 @@ int MarkovChain::LinkWords (const std::vector<Word> &all_words) {
 			for (int i = ORDER; i > 0; i -= 1) {
 				new_prefex.push_back (all_words.at (index - i));
 			}
-			
 			//DebugLoop (new_prefex);
 			
 			Prefex prefex (new_prefex);
-			map_iterator = markov_map.find (prefex);
 			
-			if (map_iterator != markov_map.end()) {
-				std::cout << "* Key already exists: " << prefex.AsString () << std::endl;
-			} else {
-				std::cout << "* Key does not exist: " << prefex.AsString () << std::endl;
-			}
-			
-			/*std::vector<Word> new_suffex;
+			std::vector<Word> new_suffex;
 			new_suffex.push_back (all_words.at (index - 1));
 			Suffex suffex (new_suffex);
 			
-			iterator_return = markov_map.insert (std::pair<Prefex, Suffex> (prefex, suffex));
+			std::pair<std::map<Prefex, Suffex>::iterator, bool> insert_return;
+			insert_return = markov_map.insert (std::pair<Prefex, Suffex> (prefex, suffex));
+			if (insert_return.second == false) {
+				std::cout << "Element already exists!" << std::endl;
+			} else {
+				std::cout << "Adding new element" << std::endl;
+			}
+			
+			/*iterator_return = markov_map.insert (std::pair<Prefex, Suffex> (prefex, suffex));
 			
 			std::cout << "iterator_return: " << iterator_return.second << std::endl;*/
 			

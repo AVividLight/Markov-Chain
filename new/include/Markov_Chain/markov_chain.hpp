@@ -70,20 +70,6 @@ public:
 		
 		return str;
 	}
-	
-	bool operator == (const Prefex other) const {
-		return /*AsString () == other.AsString ();*/ (AsString ().compare (other.AsString ()) == 0) ? true : false;
-	}
-	
-	bool operator < (const Prefex other) const {
-		
-		if (AsString ().compare (other.AsString ()) == 0) {
-			return true;
-		} else {
-			
-			return AsString () < other.AsString ();
-		}
-	}
 private:
 };
 
@@ -97,6 +83,15 @@ public:
 	}
 private:
 };
+
+
+namespace std {
+	template<> struct less<Prefex> {
+		bool operator() (const Prefex &lhs, const Prefex &rhs) const {
+			return lhs.AsString ().compare (rhs.AsString ()) < 0;
+		}
+	};
+}
 
 
 class MarkovChain {
