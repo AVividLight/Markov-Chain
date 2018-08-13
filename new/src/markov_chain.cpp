@@ -15,7 +15,7 @@ int MarkovChain::Start () {
 	}
 	
 	TextCreator text_creator;
-	std::cout << "*Generated Text*" << std::endl << std::endl << text_creator.BuildSentence () << std::endl;
+	std::cout << "*Generated Text*" << std::endl << std::endl << text_creator.BuildSentence (markov_map) << std::endl << std::endl;
 	
 	return 0;
 }
@@ -118,24 +118,24 @@ bool MarkovChain::CharIsQuotation (const char &c) {
 
 
 int MarkovChain::LinkWords (const std::vector<Word> &all_words) {
-	std::map <Prefex, Suffex>::iterator map_iterator;
+	std::map <NGram, NGram>::iterator map_iterator;
 	int total_words = all_words.size ();
 	if (total_words > ORDER) {
 		int index = ORDER;
 		while (index < total_words) {
-			Prefex new_prefex;
+			NGram new_prefex;
 			for (int i = ORDER; i > 0; i -= 1) {
-				new_prefex.words.push_back (all_words.at (index - i));
+				new_prefex.append (all_words.at (index - i));
 			}
 			
-			Suffex new_suffex;
-			new_suffex.words.push_back (all_words.at (index));
+			NGram new_suffex;
+			new_suffex.append (all_words.at (index));
 		
-			std::pair<Prefex, Suffex> ngram (new_prefex, new_suffex);
+			std::pair<NGram, NGram> ngram (new_prefex, new_suffex);
 			
-			const std::pair<std::map<Prefex, Suffex>::iterator, bool> insert_return = markov_map.insert (ngram);
+			const std::pair<std::map<NGram, NGram>::iterator, bool> insert_return = markov_map.insert (ngram);
 			if (insert_return.second == false) {
-				insert_return.first->second.words.push_back (all_words.at (index));
+				insert_return.first->second.append (all_words.at (index));
 				//std::cout << "Element already exists, now: [" << insert_return.first->first.AsString () << " : " << insert_return.first->second.AsString () << ']' << std::endl;
 			}// else {std::cout << "Adding new element: [" << insert_return.first->first.AsString () << " : " << insert_return.first->second.AsString () << ']' << std::endl;}
 				

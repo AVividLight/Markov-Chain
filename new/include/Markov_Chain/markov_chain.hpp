@@ -17,7 +17,7 @@ public:
 	int Start ();
 
 private:
-	std::map<Prefex, Suffex> markov_map;
+	std::map<NGram, NGram> markov_map;
 	
 	int BuildMap (std::string &corpus);
 	void RemoveNewLines (std::string &corpus);

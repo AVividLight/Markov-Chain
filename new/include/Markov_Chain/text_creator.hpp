@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 #include <random>
+#include <map>
+//include <unordered_map>
 
 
 const static int ORDER = 2;
@@ -58,14 +60,23 @@ private:
 };
 
 
-class Prefex {
+class NGram {
 public:
-	std::vector<Word> words;
+	NGram () {}
 	
-	Prefex () {}
-	
-	Prefex (std::vector<Word> c_words) {
+	NGram (std::vector<Word> c_words) {
 		words = c_words;
+	}
+	
+	void append (const Word word) {
+		words.push_back (word);
+	}
+	
+	Word get_at_index (const int i) const {
+		/*if (i >= words.size () || words.empty () == true)
+			return nanl;*/
+		
+		return words.at (i); //TODO Only return `i` if in range.
 	}
 	
 	std::string AsString () const {
@@ -79,6 +90,51 @@ public:
 		return str;
 	}
 private:
+	std::vector<Word> words;
+};
+
+
+namespace std {
+	template<> struct less<NGram> {
+		bool operator() (const NGram &lhs, const NGram &rhs) const {
+			return lhs.AsString ().compare (rhs.AsString ()) < 0;
+		}
+	};
+}
+
+
+/*
+class Prefex {
+public:
+	Prefex () {}
+	
+	Prefex (std::vector<Word> c_words) {
+		words = c_words;
+	}
+	
+	void append (const Word word) {
+		words.push_back (word);
+	}
+	
+	Word get_at_index (const int i) const {
+		//if (i >= words.size () || words.empty () == true)
+			//return nanl;
+		
+		return words.at (i); //TODO Only return `i` if in range.
+	}
+	
+	std::string AsString () const {
+		std::string str;
+		for (int i = 0; i < ORDER; i += 1) {
+			str.append (words.at (i).AsString ());
+			str.push_back (' ');
+		}
+		str.pop_back ();
+		
+		return str;
+	}
+private:
+	std::vector<Word> words;
 };
 
 
@@ -93,12 +149,21 @@ namespace std {
 
 class Suffex {
 public:
-	std::vector<Word> words;
-	
 	Suffex () {}
 	
 	Suffex (std::vector<Word> c_words) {
 		words = c_words;
+	}
+	
+	Word get_at_index (const int i) const {
+		//if (i >= words.size () || words.empty () == true)
+			//return nanl;
+		
+		return words.at (i); //TODO Only return `i` if in range.
+	}
+	
+	void append (const Word word) {
+		words.push_back (word);
 	}
 	
 	std::string AsString () const {
@@ -112,11 +177,20 @@ public:
 		return str;
 	}
 private:
+	std::vector<Word> words;
 };
+*/
 
 
 class Sentence {
 public:
+	void append (const Word word) {
+		words.push_back (word);
+	}
+	
+	const int length () {
+		return words.size () - 1;
+	}
 	
 	std::string AsString () const {
 		std::string str;
@@ -189,19 +263,21 @@ private:
 
 class TextCreator {
 public:
-	std::string BuildSentence ();
-	std::string BuildParagraph ();
-	std::string BuildChapter ();
-	std::string BuildBook ();
+	std::string BuildSentence (const std::map<NGram, NGram> &markov_map);
+	std::string BuildParagraph (const std::map<NGram, NGram> &markov_map);
+	std::string BuildChapter (const std::map<NGram, NGram> &markov_map);
+	std::string BuildBook (const std::map<NGram, NGram> &markov_map);
 	
 
 private:
 	std::random_device rand_device;
 	std::minstd_rand rand_generator = std::minstd_rand (rand_device ());
 	std::uniform_int_distribution<> rand_distrobution;
-	int RandomInt (const int smallest, const int largest)
-	{
-
+	int RandomInt (const int smallest, const int largest) {
+		if (smallest == largest) {
+			return smallest;
+		}
+		
 		rand_distrobution = std::uniform_int_distribution<> (smallest, largest);
 		return rand_distrobution (rand_generator);
 	}
