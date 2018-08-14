@@ -6,6 +6,28 @@
 
 #IncludeRegexTransform: 
 
+../include/Markov_Chain/io.hpp
+fstream
+-
+string
+-
+
+../include/Markov_Chain/markov_chain.hpp
+io.hpp
+../include/Markov_Chain/io.hpp
+text_creator.hpp
+../include/Markov_Chain/text_creator.hpp
+map
+-
+vector
+-
+string
+-
+sstream
+-
+iostream
+-
+
 ../include/Markov_Chain/text_creator.hpp
 string
 -
@@ -15,6 +37,16 @@ random
 -
 map
 -
+iostream
+-
+
+/usr/local/acct/development/projects/Markov Chain/new/src/main.cpp
+markov_chain.hpp
+/usr/local/acct/development/projects/Markov Chain/new/src/markov_chain.hpp
+
+/usr/local/acct/development/projects/Markov Chain/new/src/markov_chain.cpp
+markov_chain.hpp
+/usr/local/acct/development/projects/Markov Chain/new/src/markov_chain.hpp
 
 /usr/local/acct/development/projects/Markov Chain/new/src/text_creator.cpp
 text_creator.hpp

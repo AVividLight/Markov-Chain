@@ -7,6 +7,10 @@
 #include <map>
 //include <unordered_map>
 
+//***
+#include <iostream>
+//***
+
 
 const static int ORDER = 2;
 
@@ -64,12 +68,22 @@ class NGram {
 public:
 	NGram () {}
 	
+	NGram (Word new_word) {
+		words.push_back (new_word);
+	}
+	
 	NGram (std::vector<Word> c_words) {
 		words = c_words;
 	}
 	
 	void append (const Word word) {
 		words.push_back (word);
+	}
+	
+	void append (const std::vector<Word> new_words) {
+		for (int i = 0; i < new_words.size (); i += 1) {
+			words.push_back (new_words.at (i));
+		}
 	}
 	
 	Word get_at_index (const int i) const {
@@ -86,15 +100,15 @@ public:
 	}
 	
 	std::string AsString () const {
-		std::string str;
-		for (int i = 0; i < ORDER; i += 1) {
-			str.append (words.at (i).AsString ());
-			str.push_back (' '); //TODO: Change character based on context (sentence: ' ', paragraph: ". ", chapter: "\n\n", book: "\n\n***\n")
-		}
-		str.pop_back ();
+			std::string str;
+			for (int i = 0; i < words.size (); i += 1) {
+				str.append (words.at (i).AsString ());
+				str.push_back (' '); // *** TODO: Change character based on context (sentence: ' ', paragraph: ". ", chapter: "\n\n", book: "\n\n***\n")
+			}
+			str.pop_back ();
 		
-		return str;
-	}
+			return str;
+		}
 private:
 	std::vector<Word> words;
 };
@@ -109,89 +123,6 @@ namespace std {
 }
 
 
-/*class Sentence {
-public:
-	void append (const Word word) {
-		words.push_back (word);
-	}
-	
-	const int length () {
-		return words.size () - 1;
-	}
-	
-	std::vector<Word> AsVector () const {
-		return words;
-	}
-	
-	std::string AsString () const {
-		std::string str;
-		for (int i = 0; i < words.size (); i += 1) {
-			str.append (words.at (i).AsString ());
-			str.push_back (' ');
-		}
-		str.pop_back ();
-		
-		return str;
-	}
-private:
-	std::vector<Word> words;
-};
-
-
-class Paragraph {
-public:
-	
-	std::string AsString () const {
-		std::string str;
-		for (int i = 0; i < sentences.size (); i += 1) {
-			str.append (sentences.at (i).AsString ());
-			str.append (". "); //TODO Return punctuation char
-		}
-		str.pop_back ();
-		
-		return str;
-	}
-private:
-	std::vector<Sentence> sentences;
-};
-
-
-class Chapter {
-public:
-	
-	std::string AsString () const {
-		std::string str;
-		for (int i = 0; i < paragraphs.size (); i += 1) {
-			str.append (paragraphs.at (i).AsString ());
-			str.append ("\n\n");
-		}
-		str.pop_back ();
-		
-		return str;
-	}
-private:
-	std::vector<Paragraph> paragraphs;
-};
-
-
-class Book {
-public:
-	
-	std::string AsString () const {
-		std::string str;
-		for (int i = 0; i < chapters.size (); i += 1) {
-			str.append (chapters.at (i).AsString ());
-			str.append ("\n\n***\n");
-		}
-		str.pop_back ();
-		
-		return str;
-	}
-private:
-	std::vector<Chapter> chapters;
-};*/
-
-
 class TextCreator {
 public:
 	std::string BuildSentence (const std::map<NGram, NGram> &markov_map);
@@ -201,6 +132,8 @@ public:
 	
 
 private:
+	NGram RandomPrefex (const std::map<NGram, NGram> &markov_map);
+	
 	std::random_device rand_device;
 	std::minstd_rand rand_generator = std::minstd_rand (rand_device ());
 	std::uniform_int_distribution<> rand_distrobution;
