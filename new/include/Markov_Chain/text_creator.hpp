@@ -7,10 +7,6 @@
 #include <map>
 //include <unordered_map>
 
-//***
-#include <iostream>
-//***
-
 
 const static int ORDER = 2;
 

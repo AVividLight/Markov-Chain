@@ -11,7 +11,7 @@
 
 std::string TextCreator::BuildSentence (const std::map<NGram, NGram> &markov_map) {
 	NGram sentence;
-	const int this_sentence_length = RandomInt (WORDS_PER_SENTENCE_LOWEND, WORDS_PER_SENTENCE_HIGHEND);
+	const int this_sentence_length = 30;//RandomInt (WORDS_PER_SENTENCE_LOWEND, WORDS_PER_SENTENCE_HIGHEND);
 	
 	sentence.append (RandomPrefex (markov_map).AsVector ());
 	
@@ -25,8 +25,9 @@ std::string TextCreator::BuildSentence (const std::map<NGram, NGram> &markov_map
 		std::map<NGram, NGram>::const_iterator key_find = markov_map.find (new_key);
 		
 		NGram new_value;
-		if (key_find == markov_map.end()) {
+		if (key_find == markov_map.end ()) {
 			new_value.append (RandomPrefex (markov_map).AsVector ());
+			i += (ORDER - 1);
 		} else {
 			new_value.append (key_find->second.get_at_index (RandomInt (0, markov_map.at (new_key).size ())));
 		}
