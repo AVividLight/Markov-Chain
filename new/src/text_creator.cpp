@@ -10,17 +10,25 @@
 */
 
 std::string TextCreator::BuildSentence (const std::map<NGram, NGram> &markov_map) {
-	Sentence sentence;
+	NGram sentence;
 	const int this_sentence_length = RandomInt (WORDS_PER_SENTENCE_LOWEND, WORDS_PER_SENTENCE_HIGHEND);
 	
+	//***
 	auto random_key = std::next(std::begin(markov_map), RandomInt (0, markov_map.size () - 1));
-	
 	for (int i = 0; i < ORDER; i += 1) {
 		sentence.append (random_key->first.get_at_index (i));
 	}
+	//***
 	
-	for (int i = 0; i < this_sentence_length; i += 1) {
+	for (int i = ORDER; i < this_sentence_length; i += 1) {
+		std::vector<Word> prefex;
+		for (int j = 0; j < ORDER; j += 1) {
+			//prefex.push_back (sentence.AsVector.)
+		}
 		
+		NGram new_key (sentence.AsVector ());
+		
+		sentence.append (markov_map.at (new_key).get_at_index (RandomInt (0, markov_map.at (new_key).size ())));
 	}
 	
 	return sentence.AsString ();
@@ -28,7 +36,7 @@ std::string TextCreator::BuildSentence (const std::map<NGram, NGram> &markov_map
 
 
 std::string TextCreator::BuildParagraph (const std::map<NGram, NGram> &markov_map) {
-	Paragraph paragraph;
+	NGram paragraph;
 	
 	BuildSentence (markov_map);
 	
@@ -37,7 +45,7 @@ std::string TextCreator::BuildParagraph (const std::map<NGram, NGram> &markov_ma
 
 
 std::string TextCreator::BuildChapter (const std::map<NGram, NGram> &markov_map) {
-	Chapter chapter;
+	NGram chapter;
 	
 	BuildParagraph (markov_map);
 	
@@ -46,7 +54,7 @@ std::string TextCreator::BuildChapter (const std::map<NGram, NGram> &markov_map)
 
 
 std::string TextCreator::BuildBook (const std::map<NGram, NGram> &markov_map) {
-	Book book;
+	NGram book;
 	
 	BuildParagraph (markov_map);
 	

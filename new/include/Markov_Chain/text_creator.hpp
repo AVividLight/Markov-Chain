@@ -79,11 +79,17 @@ public:
 		return words.at (i); //TODO Only return `i` if in range.
 	}
 	
+	const int size () const { return words.size () - 1; }
+	
+	std::vector<Word> AsVector () const {
+		return words;
+	}
+	
 	std::string AsString () const {
 		std::string str;
 		for (int i = 0; i < ORDER; i += 1) {
 			str.append (words.at (i).AsString ());
-			str.push_back (' ');
+			str.push_back (' '); //TODO: Change character based on context (sentence: ' ', paragraph: ". ", chapter: "\n\n", book: "\n\n***\n")
 		}
 		str.pop_back ();
 		
@@ -103,86 +109,7 @@ namespace std {
 }
 
 
-/*
-class Prefex {
-public:
-	Prefex () {}
-	
-	Prefex (std::vector<Word> c_words) {
-		words = c_words;
-	}
-	
-	void append (const Word word) {
-		words.push_back (word);
-	}
-	
-	Word get_at_index (const int i) const {
-		//if (i >= words.size () || words.empty () == true)
-			//return nanl;
-		
-		return words.at (i); //TODO Only return `i` if in range.
-	}
-	
-	std::string AsString () const {
-		std::string str;
-		for (int i = 0; i < ORDER; i += 1) {
-			str.append (words.at (i).AsString ());
-			str.push_back (' ');
-		}
-		str.pop_back ();
-		
-		return str;
-	}
-private:
-	std::vector<Word> words;
-};
-
-
-namespace std {
-	template<> struct less<Prefex> {
-		bool operator() (const Prefex &lhs, const Prefex &rhs) const {
-			return lhs.AsString ().compare (rhs.AsString ()) < 0;
-		}
-	};
-}
-
-
-class Suffex {
-public:
-	Suffex () {}
-	
-	Suffex (std::vector<Word> c_words) {
-		words = c_words;
-	}
-	
-	Word get_at_index (const int i) const {
-		//if (i >= words.size () || words.empty () == true)
-			//return nanl;
-		
-		return words.at (i); //TODO Only return `i` if in range.
-	}
-	
-	void append (const Word word) {
-		words.push_back (word);
-	}
-	
-	std::string AsString () const {
-		std::string str;
-		for (int i = 0; i < words.size (); i += 1) {
-			str.append (words.at (i).AsString ());
-			str.append (", ");
-		}
-		str.erase (str.size () - 2);
-		
-		return str;
-	}
-private:
-	std::vector<Word> words;
-};
-*/
-
-
-class Sentence {
+/*class Sentence {
 public:
 	void append (const Word word) {
 		words.push_back (word);
@@ -190,6 +117,10 @@ public:
 	
 	const int length () {
 		return words.size () - 1;
+	}
+	
+	std::vector<Word> AsVector () const {
+		return words;
 	}
 	
 	std::string AsString () const {
@@ -258,7 +189,7 @@ public:
 	}
 private:
 	std::vector<Chapter> chapters;
-};
+};*/
 
 
 class TextCreator {
