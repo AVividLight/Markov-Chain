@@ -7,6 +7,8 @@
 #include <map>
 //include <unordered_map>
 
+#include <iostream>
+
 
 const static int ORDER = 2;
 
@@ -101,7 +103,7 @@ public:
 				str.append (words.at (i).AsString ());
 				str.push_back (' '); // *** TODO: Change character based on context (sentence: ' ', paragraph: ". ", chapter: "\n\n", book: "\n\n***\n")
 			}
-			str.pop_back ();
+			//str.pop_back ();
 		
 			return str;
 		}
@@ -121,7 +123,7 @@ namespace std {
 
 class TextCreator {
 public:
-	std::string BuildSentence (const std::map<NGram, NGram> &markov_map);
+	NGram BuildSentence (const std::map<NGram, NGram> &markov_map);
 	std::string BuildParagraph (const std::map<NGram, NGram> &markov_map);
 	std::string BuildChapter (const std::map<NGram, NGram> &markov_map);
 	std::string BuildBook (const std::map<NGram, NGram> &markov_map);

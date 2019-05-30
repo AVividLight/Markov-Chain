@@ -1,6 +1,22 @@
 #include "markov_chain.hpp"
 
 
+const char get_input ()
+{
+
+	std::string input;
+	
+	do
+	{
+		
+		std::cout << std::endl << "Generate another text? (y/n): ";
+		std::getline (std::cin, input);
+	} while (tolower (input[0]) != 'y' && tolower (input[0]) != 'n');
+	
+	return tolower (input[0]);
+}
+
+
 int MarkovChain::Start () {
 	InputOutput io;
 	std::string corpus;
@@ -15,7 +31,13 @@ int MarkovChain::Start () {
 	}
 	
 	TextCreator text_creator;
-	std::cout << "*Generated Text*" << std::endl << std::endl << text_creator.BuildSentence (markov_map) << std::endl << std::endl;
+	
+	do
+	{
+		
+		std::cout << std::endl << text_creator.BuildBook (markov_map) << std::endl << std::endl;
+		
+	} while (get_input () == 'y' ? true : false);
 	
 	return 0;
 }
